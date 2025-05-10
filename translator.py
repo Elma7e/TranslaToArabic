@@ -1,22 +1,12 @@
-# translator.py
-
+from transformers import pipeline
 from functools import lru_cache
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
 @lru_cache(maxsize=1)
 def _get_translator():
-    # 1. Load the SentencePiece tokenizer (non-fast) for opus-mt-en-ar
-    tokenizer = AutoTokenizer.from_pretrained(
-        "Helsinki-NLP/opus-mt-en-ar",
-        use_fast=False
-    )
-    # 2. Load the corresponding seq2seq model
-    model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ar")
-    # 3. Build the pipeline
+    # initialize once
     return pipeline(
-        "translation_en_to_ar",
-        model=model,
-        tokenizer=tokenizer
+        'translation_en_to_ar',
+        model='Helsinki-NLP/opus-mt-en-ar'
     )
 
 def translate_en_to_ar(text: str) -> str:
